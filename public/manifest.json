@@ -1,7 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "verbly",
+    "name": "Verbly",
     "version": "1.0",
+    "description": "AI-powered writing assistant using Google Gemini to fix grammar and improve tone.",
     "permissions": [
         "storage",
         "tabs",
@@ -50,5 +51,18 @@
         "32": "icon32.png",
         "64": "icon64.png",
         "128": "icon128.png"
+    },
+    "commands": {
+        "FIX_SENTENCE": {
+            "suggested_key": {
+                "default": "Alt+Shift+I"
+            },
+            "description": "Fix sentence with Verbly"
+        }
+    },
+    "externally_connectable": {
+        "matches": [
+            "<all_urls>"
+        ]
     }
 }

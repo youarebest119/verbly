@@ -1,0 +1,1 @@
+The extension communicates with the Google Gemini API to process user-selected text and return grammar corrections. No remote JavaScript is executed. The API response is treated strictly as text content and is not executed as code.

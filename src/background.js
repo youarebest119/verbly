@@ -12,17 +12,26 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (info.menuItemId === "FIX_SENTENCE") {
 
-        (async () => {
-            let response = await fixSentence(info.selectionText);
-            chrome.tabs.sendMessage(tab.id, {
-                type: "FROM_BACKGROUND",
-                responseFor: "FIX_SENTENCE",
-                payload: {
-                    result: response,
-                },
-            });
-        })()
-        return;
+        // simply send the context menu click instead of sending the fixed response
+        chrome.tabs.sendMessage(tab.id, {
+            type: "FROM_BACKGROUND",
+            responseFor: "CONTEXT_MENU_CLICK",
+            payload: {
+                result: info.selectionText,
+            },
+        });
+
+        // (async () => {
+        //     let response = await fixSentence(info.selectionText);
+        //     chrome.tabs.sendMessage(tab.id, {
+        //         type: "FROM_BACKGROUND",
+        //         responseFor: "FIX_SENTENCE",
+        //         payload: {
+        //             result: response,
+        //         },
+        //     });
+        // })()
+        // return;
 
         // let fixedResponse = {
         //     corrected: "Please send me the file as soon as possible.",

@@ -14,7 +14,6 @@
             loadingElement?.remove();
 
             let response = event.data.payload; // {result: {original: "", corrected: "", tone: ""}}
-            console.log('response: ', response);
 
             const activeElement = document.activeElement;
 
@@ -23,7 +22,6 @@
                 (activeElement.tagName === "INPUT" ||
                     activeElement.tagName === "TEXTAREA")
             ) {
-
                 const start = activeElement.selectionStart;
                 const end = activeElement.selectionEnd;
                 const value = activeElement.value;
@@ -34,6 +32,7 @@
                     value.slice(0, start) +
                     correctedText +
                     value.slice(end);
+
                 // Move caret to end of inserted text
                 const newCaretPosition = start + correctedText.length;
                 activeElement.selectionStart = newCaretPosition;
@@ -54,33 +53,16 @@
 
                 selection.removeAllRanges();
                 selection.addRange(range);
-
-                // if (!rangeData) return; // the below code was not working well in menu click case
-
-                // let newRange = document.createRange();
-                // newRange.setStart(rangeData.startContainer, rangeData.startOffset);
-                // newRange.setEnd(rangeData.endContainer, rangeData.endOffset);
-
-                // newRange.deleteContents();
-
-                // const newText = document.createTextNode(response.result.corrected);
-                // newRange.insertNode(newText);
-
-
-
-                // // Move caret after inserted text .. isn't working currently idk why
-                // newRange.setStartAfter(newText);
-                // newRange.collapse(true);
-
-                // const sel = window.getSelection();
-                // sel.removeAllRanges();
-                // sel.addRange(newRange);
             }
         }
 
         if (event.data.responseFor === "SHORTCUT_UPDATE") {
             activeShortcut = event.data.payload;
             console.log("Updated shortcut:", activeShortcut);
+        }
+
+        if (event.data.responseFor === "CONTEXT_MENU_CLICK") {
+            sendSelectionToBackground(event.data.payload.text);
         }
 
         // show popup / inject UI here
@@ -96,6 +78,10 @@
         let condition = alt && shift && key === "I";
         if (!condition) return;
 
+        sendSelectionToBackground();
+    }
+
+    function sendSelectionToBackground() {
 
         const activeElement = document.activeElement;
 
@@ -141,6 +127,7 @@
         }, "*");
     }
 
+
     function showPopup(rect) {
         // Prevent duplicate popup
         const existing = document.querySelector("#verbly-popup");
@@ -159,10 +146,15 @@
         popup.style.padding = "10px";
         popup.style.borderRadius = "8px";
 
-        popup.innerHTML = `
-        <span>Loading</span>
-        <span class="verbly-dots"></span>
-    `;
+        // Create children explicitly
+        const spanLoading = document.createElement("span");
+        spanLoading.textContent = "Loading";
+
+        const spanDots = document.createElement("span");
+        spanDots.className = "verbly-dots";
+
+        popup.appendChild(spanLoading);
+        popup.appendChild(spanDots);
 
         document.body.appendChild(popup);
 

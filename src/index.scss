@@ -1,0 +1,112 @@
+body {
+  font-family: "Geist", sans-serif;
+}
+
+
+// ===== Variables =====
+$primary: #6366f1;
+$primary-hover: #4f46e5;
+$bg: #f4f6fb;
+$text: #1f2937;
+$muted: #6b7280;
+$border: #e5e7eb;
+$radius: 12px;
+
+// ===== Base Extension Container =====
+.extension-container {
+  width: 340px; // perfect popup size
+  min-height: 320px;
+  padding: 16px;
+  background: $bg;
+}
+
+// ===== Card =====
+.card {
+  width: 100%;
+  background: white;
+  border-radius: $radius;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid $border;
+}
+
+// ===== Title =====
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: $text;
+}
+
+.subtitle {
+  margin-top: 4px;
+  font-size: 13px;
+  color: $muted;
+  margin-bottom: 18px;
+}
+
+// ===== Shortcut Row =====
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+
+  select {
+    width: 50%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid $border;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.15);
+    }
+  }
+
+  .plus {
+    font-weight: 600;
+    font-size: 16px;
+    color: $muted;
+  }
+}
+
+// ===== Save Button =====
+.save-btn {
+  width: 100%;
+  border-radius: 8px;
+  padding: 8px 0;
+  font-weight: 500;
+  background-color: $primary;
+  border: none;
+  transition: 0.2s ease;
+
+  &:hover {
+    background-color: $primary-hover;
+  }
+}
+
+// ===== Current Shortcut Badge =====
+.current-shortcut {
+  margin-top: 18px;
+  font-size: 13px;
+  color: $muted;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .badge {
+    background: rgba($primary, 0.1);
+    color: $primary;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 12px;
+  }
+}

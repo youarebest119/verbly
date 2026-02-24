@@ -13,7 +13,6 @@
 
             loadingElement?.remove();
 
-
             let response = event.data.payload; // {result: {original: "", corrected: "", tone: ""}}
             console.log('response: ', response);
 
@@ -94,57 +93,103 @@
         let shift = event.shiftKey;
         let alt = event.altKey;
         let key = event.key?.toUpperCase();
-        console.log('key: ', key);
-        let condition =
-            // ctrl && key === "i"
-            alt && shift && key === "I"
-            ;
-        if (condition) {
-
-            console.log(activeShortcut);
-
-            let selection = window.getSelection();
-            if (!selection.rangeCount) return;
-
-            let range = selection.getRangeAt(0);
-
-            // rangeData = {
-            //     startContainer: range.startContainer,
-            //     startOffset: range.startOffset,
-            //     endContainer: range.endContainer,
-            //     endOffset: range.endOffset
-            // };
+        let condition = alt && shift && key === "I";
+        if (!condition) return;
 
 
-            const rect = range.getBoundingClientRect();
+        const activeElement = document.activeElement;
 
-            let top = rect.top;
-            let left = rect.left;
-            let width = rect.width;
-            let height = rect.height;
+        // ✅ CASE 1: INPUT or TEXTAREA
+        if (
+            activeElement &&
+            (activeElement.tagName === "INPUT" ||
+                activeElement.tagName === "TEXTAREA")
+        ) {
+            const start = activeElement.selectionStart;
+            const end = activeElement.selectionEnd;
 
-            const popup = document.createElement("div");
-            popup.id = "verbly-popup";
-            popup.style.position = "absolute";
-            popup.style.top = `${top + height + window.scrollY}px`;
-            popup.style.left = `${left + window.scrollX}px`;
-            popup.style.width = `${width}px`;
-            popup.style.height = `${height}px`;
-            popup.style.backgroundColor = "#0f0b0bff";
-            popup.style.color = "white";
-            popup.style.zIndex = "9999";
-            popup.textContent = "Loading...";
+            if (start === end) return; // no selection
 
-            document.body.appendChild(popup);
+            const selectedText = activeElement.value.slice(start, end);
+
+            // Create popup near the input element
+            const rect = activeElement.getBoundingClientRect();
+
+            showPopup(rect);
 
             window.postMessage({
                 type: "FROM_PAGE",
                 requestFor: "FIX_SENTENCE",
-                payload: {
-                    text: selection.toString()
-                }
+                payload: { text: selectedText }
             }, "*");
 
+            return;
         }
+
+        // ✅ CASE 2: Normal DOM selection (contenteditable, div, etc.)
+        let selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        let range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        showPopup(rect);
+        window.postMessage({
+            type: "FROM_PAGE",
+            requestFor: "FIX_SENTENCE",
+            payload: {
+                text: selection.toString()
+            }
+        }, "*");
     }
+
+    function showPopup(rect) {
+        // Prevent duplicate popup
+        const existing = document.querySelector("#verbly-popup");
+        if (existing) existing.remove();
+
+        const popup = document.createElement("div");
+        popup.id = "verbly-popup";
+        popup.style.position = "absolute";
+        popup.style.top = `${rect.bottom + window.scrollY}px`;
+        popup.style.left = `${rect.left + window.scrollX}px`;
+        popup.style.fontFamily = "inherit";
+        popup.style.backgroundColor = "#0F172A";
+        popup.style.color = "#f4f6fb";
+        popup.style.zIndex = "9999";
+        popup.style.fontSize = "14px";
+        popup.style.padding = "10px";
+        popup.style.borderRadius = "8px";
+
+        popup.innerHTML = `
+        <span>Loading</span>
+        <span class="verbly-dots"></span>
+    `;
+
+        document.body.appendChild(popup);
+
+        injectLoadingStyles();
+    }
+
+    function injectLoadingStyles() {
+        if (document.querySelector("#verbly-loading-style")) return;
+
+        const style = document.createElement("style");
+        style.id = "verbly-loading-style";
+
+        style.textContent = `
+        .verbly-dots::after {
+            content: '.';
+            animation: verblyDots 1.2s steps(3, end) infinite;
+        }
+
+        @keyframes verblyDots {
+            0%   { content: ''; }
+            33%  { content: '.'; }
+            66%  { content: '..'; }
+            100% { content: '...'; }
+        }
+    `;
+
+        document.head.appendChild(style);
+    }
+
 })();

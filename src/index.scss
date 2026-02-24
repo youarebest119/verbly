@@ -1,15 +1,16 @@
 body {
-  font-family: "Geist", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 
 // ===== Variables =====
-$primary: #6366f1;
+$primary: #4C1D95;
 $primary-hover: #4f46e5;
-$bg: #f4f6fb;
-$text: #1f2937;
+$bg: #0F172A;
+$bg-2: #1c2947;
+$text: #f4f6fb;
 $muted: #6b7280;
-$border: #e5e7eb;
+$border: #0F172A;
 $radius: 12px;
 
 // ===== Base Extension Container =====
@@ -23,7 +24,7 @@ $radius: 12px;
 // ===== Card =====
 .card {
   width: 100%;
-  background: white;
+  background: $bg-2;
   border-radius: $radius;
   padding: 20px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
@@ -102,8 +103,8 @@ $radius: 12px;
   align-items: center;
 
   .badge {
-    background: rgba($primary, 0.1);
-    color: $primary;
+    background: rgba($primary-hover, 0.1);
+    color: $text;
     padding: 6px 10px;
     border-radius: 6px;
     font-weight: 600;

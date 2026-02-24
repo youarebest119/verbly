@@ -10,19 +10,19 @@ const App = () => {
     const [modifier, setModifier] = useState("ctrl")
     const [key, setKey] = useState("i")
 
-    const getInitialShortcut = () => {
-        chrome.storage.sync.get(["globalShortcut"], (data) => {
-            if (data.globalShortcut) {
-                console.log('data.globalShortcut: ', data.globalShortcut);
-                // setModifier(data.globalShortcut.modifier)
-                // setKey(data.globalShortcut.key)
-            }
-        })
-    }
+    // const getInitialShortcut = () => {
+    //     chrome.storage.sync.get(["globalShortcut"], (data) => {
+    //         if (data.globalShortcut) {
+    //             console.log('data.globalShortcut: ', data.globalShortcut);
+    //             // setModifier(data.globalShortcut.modifier)
+    //             // setKey(data.globalShortcut.key)
+    //         }
+    //     })
+    // }
 
-    useEffect(() => {
-        getInitialShortcut()
-    }, [])
+    // useEffect(() => {
+    //     getInitialShortcut()
+    // }, [])
 
     return (
         <div className="extension-container">

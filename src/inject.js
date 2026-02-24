@@ -1,7 +1,5 @@
 (() => {
-    console.log("Injected Verbly");
-
-    let rangeData = null;
+    // let rangeData = null;
     let activeShortcut = null;
 
     window.addEventListener("message", (event) => {
@@ -110,12 +108,12 @@
 
             let range = selection.getRangeAt(0);
 
-            rangeData = {
-                startContainer: range.startContainer,
-                startOffset: range.startOffset,
-                endContainer: range.endContainer,
-                endOffset: range.endOffset
-            };
+            // rangeData = {
+            //     startContainer: range.startContainer,
+            //     startOffset: range.startOffset,
+            //     endContainer: range.endContainer,
+            //     endOffset: range.endOffset
+            // };
 
 
             const rect = range.getBoundingClientRect();

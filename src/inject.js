@@ -75,7 +75,7 @@
         let shift = event.shiftKey;
         let alt = event.altKey;
         let key = event.key?.toUpperCase();
-        let condition = alt && shift && key === "I";
+        let condition = alt && shift && key === "G";
         if (!condition) return;
 
         sendSelectionToBackground();

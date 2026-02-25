@@ -31,15 +31,35 @@ const fixSentenceFunctionDeclaration = {
 };
 
 export const fixSentence = async (text, tone = "normal") => {
+    text = text.trim();
+    if (!text) return {
+        original: "",
+        corrected: "",
+        tone: "normal"
+    };
     try {
         const prompt = `
-Fix the following sentence.
+You are a grammar and tone correction assistant.
 
-Rules:
-- If tone is "normal", only fix grammar and spelling.
-- Keep meaning the same.
-- Apply requested tone.
-- Don't change anything if not needed.
+Your job:
+1. Detect the language of the input sentence.
+2. If it is NOT English, translate it to natural English.
+3. Fix grammar and spelling.
+4. Apply the requested tone.
+5. Keep the original meaning exactly the same.
+6. If no corrections are needed, return the sentence unchanged (but still ensure it is English).
+
+Tone rules:
+- "normal" → neutral, natural English (default)
+- "formal" → polite and refined
+- "casual" → relaxed and conversational
+- "professional" → clear, business-style tone
+- "friendly" → warm and approachable
+
+IMPORTANT:
+- The final output MUST always be in English.
+- Do not explain anything.
+- Only return the structured function call.
 
 Sentence: "${text}"
 Tone: "${tone}"

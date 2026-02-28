@@ -27,45 +27,24 @@ window.addEventListener("message", (event) => {
 });
 
 
-async function loadShortcutAndSend() {
-    const hostname = window.location.hostname;
+// async function loadTone() {
+//     const { tone } = await chrome.storage.local.get([
+//         "tone",
+//     ]);
 
-    const data = await chrome.storage.sync.get([
-        "globalShortcut",
-        "siteShortcuts",
-    ]);
+//     console.log('tone: ', tone);
+// }
 
-    let activeShortcut = null;
+// loadTone();
 
-    if (data.siteShortcuts && data.siteShortcuts[hostname]) {
-        activeShortcut = data.siteShortcuts[hostname];
-    } else {
-        activeShortcut = data.globalShortcut;
-    }
+// // // 🔥 Listen for live updates
+// chrome.storage.onChanged.addListener(() => {
+//     loadTone();
+// });
 
-    window.postMessage({
-        type: "FROM_EXTENSION",
-        payload: activeShortcut,
-        responseFor: "SHORTCUT_UPDATE",
-    }, "*");
-}
-
-loadShortcutAndSend();
-
-// // 🔥 Listen for live updates
-chrome.storage.onChanged.addListener(() => {
-    loadShortcutAndSend();
-});
-
-const saveInitialShortcuts = async () => {
-    const shortcutConfig = {
-        ctrl: true,
-        shift: false,
-        alt: false,
-        key: "i",
-    };
-    await chrome.storage.sync.set({
-        globalShortcut: shortcutConfig,
-    });
-};
-saveInitialShortcuts();
+// const saveInitialTone = async () => {
+//     await chrome.storage.local.set({
+//         tone: "normal",
+//     });
+// };
+// saveInitialTone();

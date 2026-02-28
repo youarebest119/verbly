@@ -54,7 +54,13 @@ chrome.runtime.onMessage.addListener((data, sender, sendResponse) => {
 
         if (data.requestFor === "FIX_SENTENCE") {
             (async () => {
-                let response = await fixSentence(data.payload.text);
+
+                // const { tone } = await chrome.storage.local.get([
+                //     "tone",
+                // ]);
+                // console.log('tone: ', tone);
+                const tone = "normal"
+                let response = await fixSentence(data.payload.text, tone);
                 console.log('response: ', response);
                 chrome.tabs.sendMessage(sender.tab.id, {
                     type: "FROM_BACKGROUND",

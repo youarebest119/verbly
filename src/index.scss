@@ -16,7 +16,6 @@ $radius: 12px;
 // ===== Base Extension Container =====
 .extension-container {
   width: 340px; // perfect popup size
-  min-height: 320px;
   padding: 16px;
   background: $bg;
 }
@@ -55,7 +54,7 @@ $radius: 12px;
   margin-bottom: 18px;
 
   select {
-    width: 50%;
+    width: 100%;
     padding: 8px 10px;
     border-radius: 8px;
     border: 1px solid $border;

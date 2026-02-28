@@ -5,10 +5,8 @@
     "description": "AI-powered writing assistant using Google Gemini to fix grammar and improve tone.",
     "permissions": [
         "storage",
-        "tabs",
         "contextMenus",
-        "activeTab",
-        "scripting"
+        "activeTab"
     ],
     "background": {
         "service_worker": "background.js",

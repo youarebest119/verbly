@@ -1,67 +1,67 @@
 import { useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 
-const letters = [
-    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-    "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+const toneOptions = [
+    { value: "normal", label: "normal" },
+    { value: "formal", label: "formal" },
+    { value: "casual", label: "casual" },
+    { value: "professional", label: "professional" },
+    { value: "friendly", label: "friendly" },
 ]
 
 const App = () => {
-    const [modifier, setModifier] = useState("ctrl")
-    const [key, setKey] = useState("i")
+    const [store, setStore] = useState("")
+    const [tone, setTone] = useState("normal")
 
-    // const getInitialShortcut = () => {
-    //     chrome.storage.sync.get(["globalShortcut"], (data) => {
-    //         if (data.globalShortcut) {
-    //             console.log('data.globalShortcut: ', data.globalShortcut);
-    //             // setModifier(data.globalShortcut.modifier)
-    //             // setKey(data.globalShortcut.key)
-    //         }
-    //     })
-    // }
+    const getinitialTone = async () => {
+        const { tone: storedTone } = await chrome.storage.local.get([
+            "tone",
+        ]);
 
-    // useEffect(() => {
-    //     getInitialShortcut()
-    // }, [])
+        if (storedTone) {
+            setTone(storedTone);
+            setStore(storedTone);
+        }
+    }
+
+    const handleSave = async () => {
+        await chrome.storage.local.set({
+            tone: tone,
+        });
+        setStore(tone);
+    }
+
+    useEffect(() => {
+        getinitialTone()
+    }, [])
 
     return (
         <div className="extension-container">
-            <div className="card mb-4">
-                <h4 className="title">Keyboard Shortcut</h4>
-                <p className="subtitle">Choose a key combination</p>
+            <div className="card">
+                <h4 className="title">Select Tone</h4>
+                <p className="subtitle">Choose a Tone Option</p>
 
                 <div className="shortcut-row">
                     <select
-                        value={modifier}
-                        onChange={(e) => setModifier(e.target.value)}
+                        value={tone}
+                        onChange={(e) => setTone(e.target.value)}
                     >
-                        <option value="ctrl">Ctrl</option>
-                        <option value="shift">Shift</option>
-                        <option value="alt">Alt</option>
-                    </select>
-
-                    <span className="plus">+</span>
-
-                    <select
-                        value={key}
-                        onChange={(e) => setKey(e.target.value)}
-                    >
-                        {letters.map((letter) => (
-                            <option key={letter} value={letter}>
-                                {letter.toUpperCase()}
+                        {toneOptions.map((tone) => (
+                            <option key={tone.value} value={tone.value}>
+                                {tone.label.toUpperCase()}
                             </option>
                         ))}
                     </select>
                 </div>
 
-                <Button className="save-btn">
+                <Button className="save-btn" onClick={handleSave} disabled={store === tone}>
                     Save Changes
                 </Button>
 
                 <div className="current-shortcut">
                     Current:
                     <span className="badge">
-                        {modifier.toUpperCase()} + {key.toUpperCase()}
+                        {tone.toUpperCase()}
                     </span>
                 </div>
             </div>
